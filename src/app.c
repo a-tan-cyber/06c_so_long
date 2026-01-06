@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:08:16 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/06 17:08:17 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/07 00:57:15 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@
 
 void	app_cleanup(t_app *app)
 {
-	if (app->win)
-	{
+	if (!app)
+		return ;
+	map_free(&app->map);
+	if (app->mlx && app->win)
 		mlx_destroy_window(app->mlx, app->win);
-		app->win = NULL;
-	}
 	if (app->mlx)
 	{
 		mlx_destroy_display(app->mlx);
 		free(app->mlx);
-		app->mlx = NULL;
 	}
+	*app = (t_app){0};
 }
 
 static int	on_destroy(void *param)
@@ -54,19 +54,11 @@ static int	on_keydown(int keycode, void *param)
 int	app_init(t_app *app)
 {
 	app->mlx = mlx_init();
-	app->win = NULL;
 	if (!app->mlx)
-	{
-		ft_putendl_fd("mlx_init failed", 2);
-		return (1);
-	}
-	app->win = mlx_new_window(app->mlx, 640, 480, "so_long smoke test");
+		return (sl_error("mlx_init failed"));
+	app->win = mlx_new_window(app->mlx, 640, 480, "so_long");
 	if (!app->win)
-	{
-		ft_putendl_fd("mlx_new_window failed", 2);
-		app_cleanup(app);
-		return (1);
-	}
+		return (sl_error("mlx_new_window failed"));
 	mlx_hook(app->win, KeyPress, KeyPressMask, on_keydown, app);
 	mlx_hook(app->win, DestroyNotify, 0, on_destroy, app);
 	return (0);

@@ -6,7 +6,7 @@
 #    By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/04 21:04:39 by amtan             #+#    #+#              #
-#    Updated: 2026/01/06 17:13:19 by amtan            ###   ########.fr        #
+#    Updated: 2026/01/07 00:22:23 by amtan            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,9 @@ LIBFT		:= $(LIBFTDIR)/libft.a
 CPPFLAGS	:= -I$(INCDIR) -I$(MLXDIR) -I$(LIBFTDIR)
 DEPFLAGS	:= -MMD -MP
 
-SRC_FILES	:= main.c args.c app.c
+SRC_FILES := main.c error.c args.c map_load.c map_free.c \
+				map_validate_basic.c map_validate_charset.c \
+				app.c
 SRCS		:= $(addprefix $(SRCDIR)/,$(SRC_FILES))
 
 OBJS		:= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
