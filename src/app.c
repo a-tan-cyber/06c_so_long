@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:08:16 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/07 17:44:07 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/08 00:25:14 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	app_cleanup(t_app *app)
 	if (!app)
 		return ;
 	map_free(&app->map);
+	sl_img_destroy(app, &app->fb);
 	sl_tex_destroy(app);
 	if (app->mlx && app->win)
 		mlx_destroy_window(app->mlx, app->win);
@@ -51,6 +52,11 @@ static int	on_keydown(int keycode, void *param)
 	return (0);
 }
 
+static int	on_expose(void *param)
+{
+	return (sl_render_map((t_app *)param));
+}
+
 int	app_init(t_app *app)
 {
 	if (!app)
@@ -67,7 +73,10 @@ int	app_init(t_app *app)
 	app->win = mlx_new_window(app->mlx, app->win_w, app->win_h, "so_long");
 	if (!app->win)
 		return (sl_error("mlx_new_window failed"));
+	if (sl_img_new(app, &app->fb, app->win_w, app->win_h) != 0)
+		return (1);
 	mlx_hook(app->win, KeyPress, KeyPressMask, on_keydown, app);
 	mlx_hook(app->win, DestroyNotify, 0, on_destroy, app);
+	mlx_expose_hook(app->win, on_expose, app);
 	return (0);
 }

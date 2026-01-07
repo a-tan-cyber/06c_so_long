@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 17:56:07 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/07 23:49:59 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/08 00:24:34 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,26 @@
 static void	render_cell(t_app *app, int x, int y)
 {
 	char	t;
-	void	*img;
+	t_pt	pos;
+	t_img	*base;
+	t_img	*spr;
 
 	t = app->map.grid[y][x];
-	img = app->tex.floor.img;
+	pos.x = x * SL_TILE;
+	pos.y = y * SL_TILE;
+	base = &app->tex.floor;
 	if (t == '1')
-		img = app->tex.wall.img;
-	mlx_put_image_to_window(app->mlx, app->win, img, x * SL_TILE, y * SL_TILE);
-	img = NULL;
+		base = &app->tex.wall;
+	sl_blit_key(&app->fb, base, pos, SL_KEY);
+	spr = NULL;
 	if (t == 'P')
-		img = app->tex.player.img;
+		spr = &app->tex.player;
 	else if (t == 'C')
-		img = app->tex.collect.img;
+		spr = &app->tex.collect;
 	else if (t == 'E')
-		img = app->tex.exit.img;
-	if (img)
-		mlx_put_image_to_window(app->mlx, app->win, img, x * SL_TILE, \
-y * SL_TILE);
+		spr = &app->tex.exit;
+	if (spr)
+		sl_blit_key(&app->fb, spr, pos, SL_KEY);
 }
 
 int	sl_render_map(t_app *app)
@@ -41,7 +44,7 @@ int	sl_render_map(t_app *app)
 	int	x;
 	int	y;
 
-	if (!app || !app->mlx || !app->win)
+	if (!app || !app->mlx || !app->win || !app->fb.img)
 		return (sl_error("Internal error: render"));
 	y = 0;
 	while (y < app->map.h)
@@ -54,5 +57,6 @@ int	sl_render_map(t_app *app)
 		}
 		y++;
 	}
+	mlx_put_image_to_window(app->mlx, app->win, app->fb.img, 0, 0);
 	return (0);
 }

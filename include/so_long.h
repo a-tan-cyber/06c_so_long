@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:52:43 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/07 19:05:24 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/08 01:40:01 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 
 # include <stddef.h>
 
-# define SL_TILE 32
+# define SL_KEY 0x00FF00FF
 
 # define SL_TEX_FLOOR "textures/floor.xpm"
 # define SL_TEX_WALL "textures/wall.xpm"
 # define SL_TEX_PLAYER "textures/player.xpm"
 # define SL_TEX_COLLECT "textures/collect.xpm"
 # define SL_TEX_EXIT "textures/exit.xpm"
+
+# define SL_TILE 32
 
 enum e_map_err
 {
@@ -66,10 +68,13 @@ typedef struct s_flood
 typedef struct s_img
 {
 	void	*img;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
 	int		w;
 	int		h;
 }	t_img;
-
 typedef struct s_tex
 {
 	t_img	floor;
@@ -85,6 +90,7 @@ typedef struct s_app
 	void	*win;
 	int		win_w;
 	int		win_h;
+	t_img	fb;
 	t_tex	tex;
 	t_map	map;
 }	t_app;
@@ -102,11 +108,20 @@ int		map_validate_basic(t_map *m);
 int		map_validate_charset_counts(t_map *m);
 int		map_validate_path(t_map *m);
 
+void	sl_blit_key(t_img *dst, t_img *src, t_pt pos, unsigned int key);
+
 int		sl_error(const char *msg);
 int		sl_syserr(const char *ctx);
 
 char	**sl_grid_dup(t_map *m);
 void	sl_grid_free(char **g);
+
+int		sl_img_new(t_app *app, t_img *img, int w, int h);
+int		sl_img_xpm(t_app *app, t_img *img, const char *path);
+void	sl_img_destroy(t_app *app, t_img *img);
+
+unsigned int	sl_px_get(t_img *img, int x, int y);
+void			sl_px_set(t_img *img, int x, int y, unsigned int c);
 
 int		sl_tex_load(t_app *app);
 void	sl_tex_destroy(t_app *app);
