@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:08:16 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/07 00:57:15 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/07 13:44:33 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <stdlib.h>
 #include <X11/keysym.h>
 #include <X11/X.h>
-
-#include "libft.h"
 
 void	app_cleanup(t_app *app)
 {

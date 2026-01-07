@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   app_run.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/04 21:05:58 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/07 13:43:27 by amtan            ###   ########.fr       */
+/*   Created: 2026/01/07 13:43:47 by amtan             #+#    #+#             */
+/*   Updated: 2026/01/07 13:43:49 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-#include <stdlib.h>
+#include <mlx.h>
 
-int	main(int argc, char **argv)
+int	app_run(t_app *app, const char *path)
 {
-	t_app	app;
-	int		ret;
-
-	app = (t_app){0};
-	if (check_args(argc, argv) != 0)
-		return (EXIT_FAILURE);
-	ret = app_run(&app, argv[1]);
-	app_cleanup(&app);
-	if (ret != 0)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	if (map_load(&app->map, path) != 0)
+		return (1);
+	if (map_validate_basic(&app->map) != 0)
+		return (1);
+	if (map_validate_path(&app->map) != 0)
+		return (1);
+	if (app_init(app) != 0)
+		return (1);
+	mlx_loop(app->mlx);
+	return (0);
 }
