@@ -6,12 +6,13 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:08:16 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/07 13:44:33 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/07 17:44:07 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
+#include <limits.h>
 #include <mlx.h>
 #include <stdlib.h>
 #include <X11/keysym.h>
@@ -22,6 +23,7 @@ void	app_cleanup(t_app *app)
 	if (!app)
 		return ;
 	map_free(&app->map);
+	sl_tex_destroy(app);
 	if (app->mlx && app->win)
 		mlx_destroy_window(app->mlx, app->win);
 	if (app->mlx)
@@ -51,10 +53,18 @@ static int	on_keydown(int keycode, void *param)
 
 int	app_init(t_app *app)
 {
+	if (!app)
+		return (sl_error("Internal error: app_init"));
 	app->mlx = mlx_init();
 	if (!app->mlx)
 		return (sl_error("mlx_init failed"));
-	app->win = mlx_new_window(app->mlx, 640, 480, "so_long");
+	if (app->map.w <= 0 || app->map.h <= 0)
+		return (sl_error("Map is empty"));
+	if (app->map.w > INT_MAX / SL_TILE || app->map.h > INT_MAX / SL_TILE)
+		return (sl_error("Map too large"));
+	app->win_w = app->map.w * SL_TILE;
+	app->win_h = app->map.h * SL_TILE;
+	app->win = mlx_new_window(app->mlx, app->win_w, app->win_h, "so_long");
 	if (!app->win)
 		return (sl_error("mlx_new_window failed"));
 	mlx_hook(app->win, KeyPress, KeyPressMask, on_keydown, app);

@@ -6,7 +6,7 @@
 #    By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/04 21:04:39 by amtan             #+#    #+#              #
-#    Updated: 2026/01/07 13:46:59 by amtan            ###   ########.fr        #
+#    Updated: 2026/01/07 18:00:35 by amtan            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ DEPFLAGS	:= -MMD -MP
 
 SRC_FILES := app_run.c app.c args.c error.c grid_dup.c main.c map_free.c \
 				map_load.c map_validate_basic.c map_validate_charset.c \
-				map_validate_path.c
+				map_validate_path.c render.c tex.c
 				
 SRCS		:= $(addprefix $(SRCDIR)/,$(SRC_FILES))
 
