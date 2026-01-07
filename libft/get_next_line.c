@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 13:53:55 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/02 21:28:07 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/07 12:30:23 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
+	{
+		stash = free_and_ret_null(stash);
 		return (NULL);
+	}
 	stash = read_to_stash(fd, stash);
 	if (!stash)
 		return (NULL);
@@ -105,6 +108,8 @@ static char	*stash_remainder(char *stash)
 		return (free_and_ret_null(stash));
 	i++;
 	len = gnl_strlen(stash + i);
+	if (len == 0)
+		return (free_and_ret_null(stash));
 	new_stash = malloc(len + 1);
 	if (!new_stash)
 		return (free_and_ret_null(stash));
