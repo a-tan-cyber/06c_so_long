@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 17:56:07 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/08 00:24:34 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/08 02:07:24 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,25 @@
 static void	render_cell(t_app *app, int x, int y)
 {
 	char	t;
-	t_pt	pos;
-	t_img	*base;
-	t_img	*spr;
+	t_pt	p;
 
 	t = app->map.grid[y][x];
-	pos.x = x * SL_TILE;
-	pos.y = y * SL_TILE;
-	base = &app->tex.floor;
+	p.x = x * SL_TILE;
+	p.y = y * SL_TILE;
+	sl_blit_key(&app->fb, &app->tex.floor, p, SL_KEY);
 	if (t == '1')
-		base = &app->tex.wall;
-	sl_blit_key(&app->fb, base, pos, SL_KEY);
-	spr = NULL;
-	if (t == 'P')
-		spr = &app->tex.player;
+		sl_blit_key(&app->fb, &app->tex.wall, p, SL_KEY);
 	else if (t == 'C')
-		spr = &app->tex.collect;
+		sl_blit_key(&app->fb, &app->tex.collect, p, SL_KEY);
 	else if (t == 'E')
-		spr = &app->tex.exit;
-	if (spr)
-		sl_blit_key(&app->fb, spr, pos, SL_KEY);
+		sl_blit_key(&app->fb, &app->tex.exit, p, SL_KEY);
 }
 
 int	sl_render_map(t_app *app)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
+	t_pt	p;
 
 	if (!app || !app->mlx || !app->win || !app->fb.img)
 		return (sl_error("Internal error: render"));
@@ -57,6 +50,9 @@ int	sl_render_map(t_app *app)
 		}
 		y++;
 	}
+	p.x = app->player.x * SL_TILE;
+	p.y = app->player.y * SL_TILE;
+	sl_blit_key(&app->fb, &app->tex.player, p, SL_KEY);
 	mlx_put_image_to_window(app->mlx, app->win, app->fb.img, 0, 0);
 	return (0);
 }

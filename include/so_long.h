@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:52:43 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/08 01:40:01 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/08 01:55:57 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_img
 	int		w;
 	int		h;
 }	t_img;
+
 typedef struct s_tex
 {
 	t_img	floor;
@@ -93,38 +94,44 @@ typedef struct s_app
 	t_img	fb;
 	t_tex	tex;
 	t_map	map;
+	t_pt	player;
+	int		moves;
+	int		c_left;
 }	t_app;
 
-void	app_cleanup(t_app *app);
-int		app_init(t_app *app);
-int		app_run(t_app *app, const char *path);
+void			app_cleanup(t_app *app);
+int				app_init(t_app *app);
+int				app_run(t_app *app, const char *path);
 
-int		check_args(int argc, char **argv);
+int				check_args(int argc, char **argv);
 
-void	map_free(t_map *m);
-int		map_load(t_map *m, const char *path);
+void			map_free(t_map *m);
+int				map_load(t_map *m, const char *path);
 
-int		map_validate_basic(t_map *m);
-int		map_validate_charset_counts(t_map *m);
-int		map_validate_path(t_map *m);
+int				map_validate_basic(t_map *m);
+int				map_validate_charset_counts(t_map *m);
+int				map_validate_path(t_map *m);
 
-void	sl_blit_key(t_img *dst, t_img *src, t_pt pos, unsigned int key);
+void			sl_blit_key(t_img *dst, t_img *src, t_pt pos, unsigned int key);
 
-int		sl_error(const char *msg);
-int		sl_syserr(const char *ctx);
+int				sl_error(const char *msg);
+int				sl_syserr(const char *ctx);
 
-char	**sl_grid_dup(t_map *m);
-void	sl_grid_free(char **g);
+int				sl_game_init(t_app *app);
+int				sl_game_handle_key(t_app *app, int keycode);
 
-int		sl_img_new(t_app *app, t_img *img, int w, int h);
-int		sl_img_xpm(t_app *app, t_img *img, const char *path);
-void	sl_img_destroy(t_app *app, t_img *img);
+char			**sl_grid_dup(t_map *m);
+void			sl_grid_free(char **g);
+
+int				sl_img_new(t_app *app, t_img *img, int w, int h);
+int				sl_img_xpm(t_app *app, t_img *img, const char *path);
+void			sl_img_destroy(t_app *app, t_img *img);
 
 unsigned int	sl_px_get(t_img *img, int x, int y);
 void			sl_px_set(t_img *img, int x, int y, unsigned int c);
 
-int		sl_tex_load(t_app *app);
-void	sl_tex_destroy(t_app *app);
-int		sl_render_map(t_app *app);
+int				sl_tex_load(t_app *app);
+void			sl_tex_destroy(t_app *app);
+int				sl_render_map(t_app *app);
 
 #endif
