@@ -55,45 +55,68 @@ void	*mlx_init()
 ** in remote Xserver connections.
 */
 
-int		mlx_int_deal_shm(t_xvar *xvar)
+int	mlx_int_deal_shm(t_xvar *xvar)
 {
 	int		use_pshm;
 	int		bidon;
 	char	*dpy;
 	char	buff[33];
 
-	xvar->use_xshm = XShmQueryVersion(xvar->display,&bidon,&bidon,&(use_pshm));
+	buff[0] = '\0';
+	xvar->use_xshm = XShmQueryVersion(xvar->display, &bidon, &bidon, &use_pshm);
 	if (xvar->use_xshm && use_pshm)
 		xvar->pshm_format = XShmPixmapFormat(xvar->display);
 	else
 		xvar->pshm_format = -1;
-	gethostname(buff,32);
+	if (gethostname(buff, 32) != 0)
+		buff[0] = '\0';
+	buff[32] = '\0';
 	dpy = getenv(ENV_DISPLAY);
-	if (dpy && strlen(dpy) && *dpy!=':' && strncmp(dpy,buff,strlen(buff)) &&
-			strncmp(dpy,LOCALHOST,strlen(LOCALHOST)) )
+	if (dpy && strlen(dpy) && *dpy != ':' && strncmp(dpy, buff, strlen(buff)) &&
+		strncmp(dpy, LOCALHOST, strlen(LOCALHOST)))
 	{
 		xvar->pshm_format = -1;
 		xvar->use_xshm = 0;
 	}
+	return (0);
 }
 
 /*
 ** TrueColor Visual is needed to have *_mask correctly set
 */
 
-int		mlx_int_rgb_conversion(t_xvar *xvar)
+int	mlx_int_rgb_conversion(t_xvar *xvar)
 {
-	bzero(xvar->decrgb,sizeof(int)*6);
-	while (!(xvar->visual->red_mask&1))
-		{ xvar->visual->red_mask >>= 1; xvar->decrgb[0] ++; }
-	while (xvar->visual->red_mask&1)
-		{ xvar->visual->red_mask >>= 1; xvar->decrgb[1] ++; }
-	while (!(xvar->visual->green_mask&1))
-		{ xvar->visual->green_mask >>= 1; xvar->decrgb[2] ++; }
-	while (xvar->visual->green_mask&1)
-		{ xvar->visual->green_mask >>= 1; xvar->decrgb[3] ++; }
-	while (!(xvar->visual->blue_mask&1))
-		{ xvar->visual->blue_mask >>= 1; xvar->decrgb[4] ++; }
-	while (xvar->visual->blue_mask&1)
-		{ xvar->visual->blue_mask >>= 1; xvar->decrgb[5] ++; }
+	bzero(xvar->decrgb, sizeof(int) * 6);
+	while (!(xvar->visual->red_mask & 1))
+	{
+		xvar->visual->red_mask >>= 1;
+		xvar->decrgb[0]++;
+	}
+	while (xvar->visual->red_mask & 1)
+	{
+		xvar->visual->red_mask >>= 1;
+		xvar->decrgb[1]++;
+	}
+	while (!(xvar->visual->green_mask & 1))
+	{
+		xvar->visual->green_mask >>= 1;
+		xvar->decrgb[2]++;
+	}
+	while (xvar->visual->green_mask & 1)
+	{
+		xvar->visual->green_mask >>= 1;
+		xvar->decrgb[3]++;
+	}
+	while (!(xvar->visual->blue_mask & 1))
+	{
+		xvar->visual->blue_mask >>= 1;
+		xvar->decrgb[4]++;
+	}
+	while (xvar->visual->blue_mask & 1)
+	{
+		xvar->visual->blue_mask >>= 1;
+		xvar->decrgb[5]++;
+	}
+	return (0);
 }
