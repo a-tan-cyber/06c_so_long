@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 17:08:16 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/08 02:07:12 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/08 11:29:03 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	on_keydown(int keycode, void *param)
 	app = (t_app *)param;
 	if (keycode == XK_Escape)
 		return (on_destroy(param));
-	sl_game_handle_key(app, keycode);
+	sl_game_on_key(app, keycode);
 	return (0);
 }
 

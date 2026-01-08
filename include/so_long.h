@@ -6,7 +6,7 @@
 /*   By: amtan <amtan@student.42singapore.sg>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:52:43 by amtan             #+#    #+#             */
-/*   Updated: 2026/01/08 01:55:57 by amtan            ###   ########.fr       */
+/*   Updated: 2026/01/08 11:34:53 by amtan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ typedef struct s_app
 	t_pt	player;
 	int		moves;
 	int		c_left;
+	int		won;
+	t_pt	exit;
 }	t_app;
 
 void			app_cleanup(t_app *app);
@@ -119,6 +121,8 @@ int				sl_syserr(const char *ctx);
 
 int				sl_game_init(t_app *app);
 int				sl_game_handle_key(t_app *app, int keycode);
+int				sl_game_move(t_app *app, int dx, int dy);
+int				sl_game_on_key(t_app *app, int keycode);
 
 char			**sl_grid_dup(t_map *m);
 void			sl_grid_free(char **g);
@@ -130,8 +134,8 @@ void			sl_img_destroy(t_app *app, t_img *img);
 unsigned int	sl_px_get(t_img *img, int x, int y);
 void			sl_px_set(t_img *img, int x, int y, unsigned int c);
 
+int				sl_render_map(t_app *app);
 int				sl_tex_load(t_app *app);
 void			sl_tex_destroy(t_app *app);
-int				sl_render_map(t_app *app);
 
 #endif
