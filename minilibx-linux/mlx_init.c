@@ -5,7 +5,7 @@
 ** Login   <ol@epitech.net>
 ** 
 ** Started on  Mon Jul 31 16:52:42 2000 Charlie Root
-** Last update Fri Jan 28 17:05:09 2005 Olivier Crouzet
+** Last update Thu Jan  8 12:00:00 2026 amtan
 */
 
 

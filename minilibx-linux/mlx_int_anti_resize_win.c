@@ -5,7 +5,7 @@
 ** Login   <ol@epitech.net>
 ** 
 ** Started on  Tue Aug  8 14:31:05 2000 Charlie Root
-** Last update Tue Sep 25 15:56:58 2001 Charlie Root
+** Last update Thu Jan  8 12:00:00 2026 amtan
 */
 
 #include "mlx_int.h"
